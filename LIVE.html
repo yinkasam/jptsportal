@@ -1,38 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./GPT.css" />
-  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png" />
-  <title>Login | JPTS Portal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login</title>
+  <link rel="stylesheet" href="./GPT.css">
+  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png">
+  <script type="module" src="./auth.js" defer></script>
 </head>
 <body>
   <div class="auth-container">
-    <h2>JPTS Live Portal</h2>
+    <div class="auth-card">
+      <h2 id="formTitle">Login</h2>
 
-    <!-- Login Form -->
-    <div class="auth-box">
-      <h3>Login</h3>
-      <input type="email" id="loginEmail" placeholder="Email" required />
-      <input type="password" id="loginPassword" placeholder="Password" required />
-      <button id="loginBtn">Login</button>
-    </div>
+      <!-- Login Form -->
+      <div id="loginForm">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="Enter email" required>
 
-    <hr>
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" required>
 
-    <!-- Registration Form -->
-    <div class="auth-box">
-      <h3>Register</h3>
-      <input type="text" id="regName" placeholder="Full Name" required />
-      <input type="text" id="regMatric" placeholder="Matric Number" required />
-      <input type="email" id="regEmail" placeholder="Email" required />
-      <input type="password" id="regPassword" placeholder="Password" required />
-      <button id="registerBtn">Register</button>
+        <button class="auth-btn" id="loginBtn">Login</button>
+
+        <div class="toggle-auth">
+          <p>Don’t have an account? <a href="#" id="showRegister">Register</a></p>
+        </div>
+      </div>
+
+      <!-- Registration Form -->
+      <div id="registerForm" style="display: none;">
+        <label>Full Name</label>
+        <input type="text" id="regName" placeholder="Enter full name" required>
+
+        <label>Matric Number</label>
+        <input type="text" id="regMatric" placeholder="Enter matric number" required>
+
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="Enter email" required>
+
+        <label>Password</label>
+        <input type="password" id="regPassword" placeholder="Enter password" required>
+
+        <button class="auth-btn" id="registerBtn">Register</button>
+
+        <div class="toggle-auth">
+          <p>Already registered? <a href="#" id="showLogin">Login</a></p>
+        </div>
+      </div>
     </div>
   </div>
-
-  <script type="module" src="./firebase.js"></script>
-  <script type="module" src="./auth.js"></script>
 </body>
 </html>
