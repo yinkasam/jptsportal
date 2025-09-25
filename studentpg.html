@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./GPT.css">
-  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png">
-  <title>Lecture</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./GPT.css" />
+  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png" />
+  <title>Live Lecture</title>
 </head>
 <body>
   <header>
     <div class="logo">
-      <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="logo-img">
+      <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="logo-img" />
       JPTS Live Portal
     </div>
     <nav>
@@ -41,99 +41,41 @@
     </div>
   </div>
 
+  <!-- Firebase + Student Logic -->
+  <script type="module" src="./firebase.js"></script>
+  <script type="module" src="./student.js"></script>
+
   <footer class="site-footer">
     <div class="footer-container">
+      <!-- School Logo & Info -->
       <div class="footer-section">
-        <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="footer-logo">
-        <p><strong>JPTS Int'l</strong><br>Lagos, Nigeria</p>
+        <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="footer-logo" />
+        <p><strong>JPTS Int'l</strong><br />Lagos, Nigeria</p>
       </div>
+
+      <!-- Project Designer Info -->
       <div class="footer-section">
         <h4>Project By</h4>
         <p>Designed by: Yinka</p>
         <a href="https://linktr.ee/yourusername" target="_blank">My Linktree</a>
       </div>
+
+      <!-- Contact -->
       <div class="footer-section">
         <h4>Contact</h4>
         <p>Email: <a href="mailto:yinkasam1337@gmail.com">yinkasam1337@gmail.com</a></p>
       </div>
+
+      <!-- Credits -->
       <div class="footer-section">
         <h4>Credits</h4>
-        <p>Powered by <a href="" target="_blank">blueline tech</a></p>
+        <p>Powered by <a href="#" target="_blank">blueline tech</a></p>
       </div>
     </div>
+
     <div class="footer-bottom">
       <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
     </div>
   </footer>
-
-  <script>
-    // Redirect if not logged in
-    if (localStorage.getItem("loggedIn") !== "true") {
-      window.location.href = "LIVE.html";
-    }
-
-    const name = localStorage.getItem("studentName");
-    const matric = localStorage.getItem("studentMatric");
-    if (!name || !matric) {
-      window.location.href = "LIVE.html";
-    }
-
-    // === Get lecture ID from URL ===
-    const params = new URLSearchParams(window.location.search);
-    const id = parseInt(params.get("id"));
-
-    const lectures = JSON.parse(localStorage.getItem("lectures") || "[]");
-    const lecture = lectures[id];
-
-    if (lecture) {
-      document.getElementById("courseTitle").textContent =
-        `Now Streaming: ${lecture.title} (${lecture.code})`;
-      document.getElementById("courseDetails").textContent =
-        `Lecturer: ${lecture.lecturer}`;
-      document.getElementById("streamFrame").src = lecture.link;
-    } else {
-      document.getElementById("courseTitle").textContent =
-        "No live lecture found.";
-    }
-
-    // === Attendance Handling ===
-    function markAttendance() {
-      let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
-      if (!sessionStorage.getItem("attendanceMarked_" + id)) {
-        count++;
-        localStorage.setItem(matric + "_attendance", count);
-
-        let total = parseInt(localStorage.getItem("totalAttendance")) || 0;
-        localStorage.setItem("totalAttendance", total + 1);
-
-        sessionStorage.setItem("attendanceMarked_" + id, "true");
-      }
-    }
-
-    function updateCounter() {
-      let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
-      document.getElementById("studentCounter").textContent =
-        `Lectures Attended: ${count}`;
-    }
-
-    if (lecture) {
-      markAttendance();
-      updateCounter();
-      setInterval(updateCounter, 10000);
-    }
-
-    // === Logout ===
-    function logout() {
-      localStorage.removeItem("loggedIn");
-      localStorage.removeItem("studentName");
-      localStorage.removeItem("studentMatric");
-      sessionStorage.clear();
-      window.location.href = "LIVE.html";
-    }
-  </script>
-  <script type="module" src="./firebase.js"></script>
-<script type="module" src="./student.js"></script>
-
 </body>
 </html>
-
