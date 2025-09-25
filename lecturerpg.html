@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./GPT.css">
-  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./GPT.css" />
+  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png" />
   <title>Lecturer Dashboard</title>
 </head>
 <body>
   <header>
     <div class="logo">
-      <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="logo-img">
+      <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="logo-img" />
       JPTS Live Portal
     </div>
     <nav>
       <a href="index.html">Home</a>
+      <a href="#" onclick="logout()">Logout</a>
     </nav>
   </header>
 
@@ -24,76 +25,58 @@
     <!-- Lecture Form -->
     <div class="lecture-link-box">
       <h3>Start a Live Lecture</h3>
+
       <label for="courseTitle">Course Title:</label>
-      <input type="text" id="courseTitle" placeholder="e.g. Linear Algebra" required><br>
+      <input type="text" id="courseTitle" placeholder="e.g. Linear Algebra" required /><br />
 
       <label for="courseCode">Course Code:</label>
-      <input type="text" id="courseCode" placeholder="e.g. MTH302" required><br>
+      <input type="text" id="courseCode" placeholder="e.g. MTH302" required /><br />
 
       <label for="lecturerName">Lecturer Name:</label>
-      <input type="text" id="lecturerName" placeholder="e.g. Dr. Akin"><br>
+      <input type="text" id="lecturerName" placeholder="e.g. Dr. Akin" /><br />
 
       <label for="lectureLink">Streaming Link:</label>
-      <input type="text" id="lectureLink" placeholder="Paste Facebook/YouTube link here" required><br>
+      <input type="text" id="lectureLink" placeholder="Paste YouTube or Facebook embed link here" required /><br />
 
       <button class="save-btn" onclick="saveLecture()">Go Live</button>
     </div>
-
-    <hr>
-    <button onclick="downloadCSV()">Download Attendance CSV</button>
   </div>
 
-  <script>
-    // Save Lecture
-    function saveLecture() {
-      const lecture = {
-        id: Date.now(),
-        title: document.getElementById("courseTitle").value.trim(),
-        code: document.getElementById("courseCode").value.trim(),
-        lecturer: document.getElementById("lecturerName").value.trim(),
-        link: document.getElementById("lectureLink").value.trim()
-      };
-
-      if (!lecture.title || !lecture.code || !lecture.link) {
-        alert("Please fill in all required fields.");
-        return;
-      }
-
-      let lectures = JSON.parse(localStorage.getItem("lectures") || "[]");
-      lectures.push(lecture);
-      localStorage.setItem("lectures", JSON.stringify(lectures));
-
-      alert("Lecture added successfully! Students can now view it.");
-    }
-
-    // Download Attendance
-    function downloadCSV() {
-      let rows = [['Matric Number', 'Full Name', 'Attendance Count']];
-      let students = JSON.parse(localStorage.getItem("students") || "{}");
-
-      for (let key in localStorage) {
-        if (key.endsWith('_attendance')) {
-          let matric = key.replace('_attendance','');
-          let count = localStorage.getItem(key);
-          let name = students[matric] || "Unknown";
-          rows.push([matric, name, count]);
-        }
-      }
-
-      let csvContent = rows.map(e => e.join(",")).join("\n");
-      let blob = new Blob([csvContent], {type: 'text/csv'});
-      let url = URL.createObjectURL(blob);
-      let a = document.createElement('a');
-      a.href = url;
-      a.download = 'attendance.csv';
-      a.click();
-    }
-  </script>
+  <!-- Firebase -->
   <script type="module" src="./firebase.js"></script>
-<script type="module" src="./lecturer.js"></script>
+  <script type="module" src="./lecturer.js"></script>
 
+  <footer class="site-footer">
+    <div class="footer-container">
+      <!-- School Logo & Info -->
+      <div class="footer-section">
+        <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="footer-logo" />
+        <p><strong>JPTS Int'l</strong><br />Lagos, Nigeria</p>
+      </div>
+
+      <!-- Project Designer Info -->
+      <div class="footer-section">
+        <h4>Project By</h4>
+        <p>Designed by: Yinka</p>
+        <a href="https://linktr.ee/yourusername" target="_blank">My Linktree</a>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <p>Email: <a href="mailto:yinkasam1337@gmail.com">yinkasam1337@gmail.com</a></p>
+      </div>
+
+      <!-- Credits -->
+      <div class="footer-section">
+        <h4>Credits</h4>
+        <p>Powered by <a href="#" target="_blank">blueline tech</a></p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
+    </div>
+  </footer>
 </body>
 </html>
-
-
-
