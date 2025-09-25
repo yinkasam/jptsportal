@@ -101,6 +101,106 @@ button:hover {
   transform: translateY(-20px) translateX(-12px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
+
+/* ===============================
+   AUTH PAGES (LOGIN / REGISTER)
+   =============================== */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  background: linear-gradient(135deg, #f31496, #2b3a67);
+  padding: 20px;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  animation: fadeInUp 0.6s ease;
+}
+
+.auth-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2b3a67;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.auth-card label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  transition: border 0.3s ease;
+}
+
+.auth-card input:focus {
+  border-color: #f31496;
+  outline: none;
+}
+
+.auth-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #f31496;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.auth-btn:hover {
+  background: #b9058c;
+  transform: translateY(-2px);
+}
+
+.toggle-auth {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.toggle-auth a {
+  color: #2b3a67;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.toggle-auth a:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* ===== Student Card ===== */
 .student-card {
   background: #fff;
@@ -385,3 +485,4 @@ body {
 .footer-section a:hover {
   text-decoration: underline;
 }
+
