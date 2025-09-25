@@ -29,74 +29,16 @@
       </div>
       <div class="student-extra">
         <p>Welcome 👋</p>
-        <p><strong>Lectures Attended:</strong> <span id="attendedCount">0</span></p>
+        <p>
+          <strong>Lectures Attended:</strong>
+          <span id="attendedCount">0</span>
+        </p>
       </div>
     </div>
 
     <h2>Available Live Lectures</h2>
-    <div class="lecture-list" id="lectureList">
-      <!-- Lectures will load here dynamically -->
-    </div>
+    <div id="lectureList" class="lecture-list"></div>
   </div>
-
-  <script>
-    // Redirect if not logged in
-    if (!localStorage.getItem("loggedIn")) {
-      window.location.href = "LIVE.html";
-    }
-
-    // Student details
-    const name = localStorage.getItem("studentName") || "Unknown";
-    const matric = localStorage.getItem("studentMatric") || "N/A";
-    const count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
-
-    document.getElementById("studentName").textContent = name;
-    document.getElementById("studentMatric").textContent = matric;
-    document.getElementById("attendedCount").textContent = count;
-
-    // Get current lecture(s) saved by lecturer
-    const lectures = JSON.parse(localStorage.getItem("lectures") || "[]");
-
-    const lectureList = document.getElementById("lectureList");
-
-    if (lectures.length > 0) {
-      lectures.forEach(lec => {
-        const card = document.createElement("div");
-        card.className = "lecture-card";
-        card.innerHTML = `
-          <h3>${lec.title} (${lec.code})</h3>
-          <p>Lecturer: ${lec.lecturer}</p>
-          <a href="studentpg.html?course=${encodeURIComponent(lec.title)}"
-             onclick="joinLecture('${lec.title}')"
-             class="join-btn">Join Lecture</a>
-        `;
-        lectureList.appendChild(card);
-      });
-    } else {
-      lectureList.innerHTML = "<p>No live lectures available right now.</p>";
-    }
-
-    // Mark attendance when joining
-    function joinLecture(course) {
-      if (name && matric) {
-        let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
-        localStorage.setItem(matric + "_attendance", ++count);
-
-        let total = parseInt(localStorage.getItem("totalAttendance")) || 0;
-        localStorage.setItem("totalAttendance", total + 1);
-
-        localStorage.setItem("lastCourse", course);
-      }
-    }
-
-    // Logout
-    function logout() {
-      localStorage.removeItem("studentName");
-      localStorage.removeItem("studentMatric");
-      localStorage.removeItem("loggedIn");
-      window.location.href = "LIVE.html";
-    }
-  </script>
 
   <footer class="site-footer">
     <div class="footer-container">
@@ -115,12 +57,62 @@
       </div>
       <div class="footer-section">
         <h4>Credits</h4>
-        <p>Powered & Built by <a href="https://github.com/yinkasam/" target="_blank">Yinka Samuel John Jacobs</a></p>
+        <p>Powered by <a href="" target="_blank">blueline tech</a></p>
       </div>
     </div>
     <div class="footer-bottom">
       <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
     </div>
   </footer>
+
+  <script>
+    // Redirect if not logged in
+    if (!localStorage.getItem("loggedIn")) {
+      window.location.href = "LIVE.html";
+    }
+
+    // Populate student details
+    const name = localStorage.getItem("studentName") || "Unknown";
+    const matric = localStorage.getItem("studentMatric") || "N/A";
+    document.getElementById("studentName").textContent = name;
+    document.getElementById("studentMatric").textContent = matric;
+
+    // Update attendance count
+    let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
+    document.getElementById("attendedCount").textContent = count;
+
+    // Logout
+    function logout() {
+      localStorage.removeItem("studentName");
+      localStorage.removeItem("studentMatric");
+      localStorage.removeItem("loggedIn");
+      window.location.href = "LIVE.html";
+    }
+
+    // Load dynamic lectures
+    function loadLectures() {
+      const lectures = JSON.parse(localStorage.getItem("lectures") || "[]");
+      const container = document.getElementById("lectureList");
+      container.innerHTML = "";
+
+      if (lectures.length === 0) {
+        container.innerHTML = "<p>No live lectures available at the moment.</p>";
+        return;
+      }
+
+      lectures.forEach((lecture, index) => {
+        const card = document.createElement("div");
+        card.className = "lecture-card";
+        card.innerHTML = `
+          <h3>${lecture.title} (${lecture.code})</h3>
+          <p>Lecturer: ${lecture.lecturer}</p>
+          <a href="studentpg.html?id=${index}" class="join-btn">Join Lecture</a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    loadLectures();
+  </script>
 </body>
 </html>
