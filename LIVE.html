@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Login</title>
+  <title>Login | JPTS Live Portal</title>
   <link rel="stylesheet" href="./GPT.css">
   <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png">
   <script type="module" src="./auth.js" defer></script>
@@ -33,14 +33,20 @@
         <label>Full Name</label>
         <input type="text" id="regName" placeholder="Enter full name" required>
 
-        <label>Matric Number</label>
-        <input type="text" id="regMatric" placeholder="Enter matric number" required>
+        <label>Matric Number (Students only)</label>
+        <input type="text" id="regMatric" placeholder="Enter matric number">
 
         <label>Email</label>
         <input type="email" id="regEmail" placeholder="Enter email" required>
 
         <label>Password</label>
         <input type="password" id="regPassword" placeholder="Enter password" required>
+
+        <label>Role</label>
+        <select id="regRole" required>
+          <option value="student">Student</option>
+          <option value="lecturer">Lecturer</option>
+        </select>
 
         <button class="auth-btn" id="registerBtn">Register</button>
 
