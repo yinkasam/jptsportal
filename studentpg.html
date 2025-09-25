@@ -31,10 +31,40 @@
       <iframe
         id="streamFrame"
         src=""
+        width="700"
+        height="400"
+        style="border:none;overflow:hidden"
+        scrolling="no"
+        frameborder="0"
         allowfullscreen="true">
       </iframe>
     </div>
   </div>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="footer-logo">
+        <p><strong>JPTS Int'l</strong><br>Lagos, Nigeria</p>
+      </div>
+      <div class="footer-section">
+        <h4>Project By</h4>
+        <p>Designed by: Yinka</p>
+        <a href="https://linktr.ee/yourusername" target="_blank">My Linktree</a>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <p>Email: <a href="mailto:yinkasam1337@gmail.com">yinkasam1337@gmail.com</a></p>
+      </div>
+      <div class="footer-section">
+        <h4>Credits</h4>
+        <p>Powered by <a href="" target="_blank">blueline tech</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
+    </div>
+  </footer>
 
   <script>
     // Redirect if not logged in
@@ -48,8 +78,12 @@
       window.location.href = "LIVE.html";
     }
 
-    // === Get Current Lecture from Lecturer ===
-    const lecture = JSON.parse(localStorage.getItem("currentLecture") || "null");
+    // === Get lecture ID from URL ===
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+
+    const lectures = JSON.parse(localStorage.getItem("lectures") || "[]");
+    const lecture = lectures[id];
 
     if (lecture) {
       document.getElementById("courseTitle").textContent =
@@ -59,20 +93,20 @@
       document.getElementById("streamFrame").src = lecture.link;
     } else {
       document.getElementById("courseTitle").textContent =
-        "No live lecture available right now.";
+        "No live lecture found.";
     }
 
     // === Attendance Handling ===
     function markAttendance() {
       let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
-      if (lecture && !sessionStorage.getItem("attendanceMarked_" + lecture.code)) {
+      if (!sessionStorage.getItem("attendanceMarked_" + id)) {
         count++;
         localStorage.setItem(matric + "_attendance", count);
 
         let total = parseInt(localStorage.getItem("totalAttendance")) || 0;
         localStorage.setItem("totalAttendance", total + 1);
 
-        sessionStorage.setItem("attendanceMarked_" + lecture.code, "true");
+        sessionStorage.setItem("attendanceMarked_" + id, "true");
       }
     }
 
@@ -82,9 +116,11 @@
         `Lectures Attended: ${count}`;
     }
 
-    markAttendance();
-    updateCounter();
-    setInterval(updateCounter, 10000);
+    if (lecture) {
+      markAttendance();
+      updateCounter();
+      setInterval(updateCounter, 10000);
+    }
 
     // === Logout ===
     function logout() {
@@ -95,42 +131,5 @@
       window.location.href = "LIVE.html";
     }
   </script>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <!-- School Logo & Info -->
-      <div class="footer-section">
-        <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="footer-logo">
-        <p><strong>JPTS Int'l</strong><br>
-        Lagos, Nigeria</p>
-      </div>
-  
-      <!-- Project Designer Info -->
-      <div class="footer-section">
-        <h4>Project By</h4>
-        <p>Designed by: Yinka</p>
-        <a href="https://linktr.ee/yourusername" target="_blank">My Linktree</a>
-      </div>
-  
-      <!-- Contact -->
-      <div class="footer-section">
-        <h4>Contact</h4>
-        <p>Email: <a href="mailto:yinkasam1337@gmail.com">yinkasam1337@gmail.com</a></p>
-      </div>
-  
-      <!-- Credits -->
-      <div class="footer-section">
-        <h4>Credits</h4>
-        <p>Powered & Built by <a href="https://github.com/yinkasam/" target="_blank">Yinka Samuel John Jacobs</a></p>
-      </div>
-    </div>
-  
-    <div class="footer-bottom">
-      <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
-    </div>
-  </footer>
 </body>
 </html>
-
-
