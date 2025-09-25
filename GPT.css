@@ -102,105 +102,106 @@ button:hover {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* ===============================
-   AUTH PAGES (LOGIN / REGISTER)
-   =============================== */
-.auth-container {
+
+
+/* === AUTH PAGE (LIVE.html) === */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #0056b3, #0099cc);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 90vh;
-  background: linear-gradient(135deg, #f31496, #2b3a67);
-  padding: 20px;
+  min-height: 100vh;
+  margin: 0;
+  color: #333;
 }
 
-.auth-card {
+.auth-wrapper {
+  width: 400px;
   background: #fff;
   padding: 40px;
-  width: 100%;
-  max-width: 400px;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  animation: fadeInUp 0.6s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-.auth-card h2 {
+.form-box {
+  display: none;
+}
+
+.form-box.active,
+.form-box.login {
+  display: block;
+}
+
+.form-box h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #2b3a67;
-  font-size: 1.8rem;
-  font-weight: bold;
+  color: #0056b3;
 }
 
-.auth-card label {
+.input-box {
+  margin-bottom: 15px;
+}
+
+.input-box label {
+  font-weight: bold;
   display: block;
-  margin: 10px 0 5px;
-  font-weight: bold;
-  color: #333;
-  font-size: 14px;
+  margin-bottom: 5px;
 }
 
-.auth-card input {
+.input-box input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   font-size: 14px;
-  transition: border 0.3s ease;
+  transition: border-color 0.3s;
 }
 
-.auth-card input:focus {
-  border-color: #f31496;
+.input-box input:focus {
+  border-color: #0056b3;
   outline: none;
 }
 
 .auth-btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 6px;
-  background: #f31496;
+  background: #0056b3;
   color: #fff;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.3s;
+  margin-top: 10px;
 }
 
 .auth-btn:hover {
-  background: #b9058c;
-  transform: translateY(-2px);
+  background: #004494;
 }
 
-.toggle-auth {
-  text-align: center;
+.switch {
   margin-top: 15px;
   font-size: 14px;
+  text-align: center;
 }
 
-.toggle-auth a {
-  color: #2b3a67;
-  text-decoration: none;
+.switch a {
+  color: #0056b3;
   font-weight: bold;
+  text-decoration: none;
 }
 
-.toggle-auth a:hover {
+.switch a:hover {
   text-decoration: underline;
 }
 
-@keyframes fadeInUp {
-  from {
-    transform: translateY(40px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 /* ===== Student Card ===== */
 .student-card {
   background: #fff;
@@ -485,4 +486,5 @@ body {
 .footer-section a:hover {
   text-decoration: underline;
 }
+
 
