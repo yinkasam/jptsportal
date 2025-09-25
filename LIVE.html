@@ -1,101 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Login</title>
-  <link rel="stylesheet" href="GPT.css">
-  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./GPT.css" />
+  <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png" />
+  <title>Login | JPTS Portal</title>
 </head>
-
 <body>
-  <div class="box">
-    <h2 id="login">Login</h2>
-    <form id="loginForm" onsubmit="return false;">
-      <input class="fullname" type="text" name="fullName" id="fullName" placeholder="FULL NAME" required>
-      <input class="matric" type="text" name="matric" id="matric" placeholder="MATRIC NUMBER" required>
-      <a href="#" class="forget">FORGOT YOUR MATRIC NUMBER?</a>
-    </form>
+  <div class="auth-container">
+    <h2>JPTS Live Portal</h2>
 
-    <div class="btnGroup">
-      <button type="button" class="SIGNIN-btn" onclick="handleLogin()">SIGN IN</button>
+    <!-- Login Form -->
+    <div class="auth-box">
+      <h3>Login</h3>
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button id="loginBtn">Login</button>
+    </div>
+
+    <hr>
+
+    <!-- Registration Form -->
+    <div class="auth-box">
+      <h3>Register</h3>
+      <input type="text" id="regName" placeholder="Full Name" required />
+      <input type="text" id="regMatric" placeholder="Matric Number" required />
+      <input type="email" id="regEmail" placeholder="Email" required />
+      <input type="password" id="regPassword" placeholder="Password" required />
+      <button id="registerBtn">Register</button>
     </div>
   </div>
-  
-  
 
-  <script>
-    function handleLogin() {
-      const name = document.getElementById("fullName").value.trim();
-      const matric = document.getElementById("matric").value.trim();
-
-      if (!name || !matric ) {
-        alert("Please fill in all fields!");
-        return;
-      }
-
-      // Save login info to localStorage
-      localStorage.setItem("loggedIn", "true");
-      localStorage.setItem("studentName", name);
-      localStorage.setItem("studentMatric", matric);
-
-      // Initialize attendance for new matric if not already tracked
-      if (!localStorage.getItem(`${matric}_attendance`)) {
-        localStorage.setItem(`${matric}_attendance`, "0");
-      }
-
-      // Keep mapping of matric -> name for lecturer dashboard
-      let students = JSON.parse(localStorage.getItem("students") || "{}");
-      students[matric] = name;
-      localStorage.setItem("students", JSON.stringify(students));
-
-      // Redirect to landing page
-      window.location.href = "index.html";
-
-      if (!localStorage.getItem(`${matric}_attendance`)) {
-  localStorage.setItem(`${matric}_attendance`, "0");
-}
-
-    }
-  </script>
   <script type="module" src="./firebase.js"></script>
-<script type="module" src="./login.js"></script>
-
-  <footer class="site-footer">
-    <div class="footer-container">
-      <!-- School Logo & Info -->
-      <div class="footer-section">
-        <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="footer-logo">
-        <p><strong>JPTS Int'l</strong><br>
-        Lagos, Nigeria</p>
-      </div>
-  
-      <!-- Project Designer Info -->
-      <div class="footer-section">
-        <h4>Project By</h4>
-        <p>Designed by: Yinka</p>
-        <a href="https://linktr.ee/yourusername" target="_blank">My Linktree</a>
-      </div>
-  
-      <!-- Contact -->
-      <div class="footer-section">
-        <h4>Contact</h4>
-        <p>Email: <a href="mailto:yinkasam1337@gmail.com">yinkasam1337@gmail.com</a></p>
-      </div>
-  
-      <!-- Credits -->
-      <div class="footer-section">
-        <h4>Credits</h4>
-        <p>Powered by <a href="" target="_blank">blueline tech</a></p>
-      </div>
-    </div>
-  
-    <div class="footer-bottom">
-      <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
-    </div>
-  </footer>
+  <script type="module" src="./auth.js"></script>
 </body>
 </html>
-
-
