@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./GPT.css" />
+    <link rel="icon" type="image/png" href="./assets/jpts_2-removebg-preview.png">
+    <!-- already styled -->
+    <title>Live Portal</title>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="logo-img">
+        JPTS Live Portal
+      </div>
+      <nav>
+        <a href="./GPTindex.html">Home</a>
+        <a href="./studentpg.html">Lectures</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <!-- Student Profile Card -->
+      <div class="student-card">
+        <div class="student-info">
+          <p><strong>Name:</strong> <span id="studentName"></span></p>
+          <p><strong>Matric:</strong> <span id="studentMatric"></span></p>
+        </div>
+        <div class="student-extra">
+          <p>Welcome 👋</p>
+          <p>
+            <strong>Lectures Attended:</strong>
+            <span id="attendedCount">0</span>
+          </p>
+        </div>
+      </div>
+
+      <h2>Available Live Lectures</h2>
+
+      <div class="lecture-list">
+        <!-- Math -->
+        <div class="lecture-card">
+          <h3>Math 302</h3>
+          <p>Lecturer: Dr. Akin</p>
+          <p>Time: 10:00 AM - 12:00 PM</p>
+          <a
+            href="studentpg.html?course=Math%20302"
+            onclick="joinLecture('Math 302')"
+            class="join-btn"
+            >Join Lecture</a
+          >
+        </div>
+
+        <!-- Computer Science -->
+        <div class="lecture-card">
+          <h3>Computer Science 201</h3>
+          <p>Lecturer: Prof. Bisi</p>
+          <p>Time: 1:00 PM - 3:00 PM</p>
+          <a
+            href="studentpg.html?course=Computer%20Science%20201"
+            onclick="joinLecture('Computer Science 201')"
+            class="join-btn"
+            >Join Lecture</a
+          >
+        </div>
+
+        <!-- Physics -->
+        <div class="lecture-card">
+          <h3>Physics 101</h3>
+          <p>Lecturer: Mr. Ade</p>
+          <p>Time: 3:30 PM - 5:00 PM</p>
+          <a
+            href="studentpg.html?course=Physics%20101"
+            onclick="joinLecture('Physics 101')"
+            class="join-btn"
+            >Join Lecture</a
+          >
+        </div>
+      </div>
+    </div>
+    <footer></footer>
+
+    <script>
+      // Redirect if not logged in
+      if (!localStorage.getItem("loggedIn")) {
+        window.location.href = "LIVE.html";
+      }
+
+      // Populate student details
+      const name = localStorage.getItem("studentName") || "Unknown";
+      const matric = localStorage.getItem("studentMatric") || "N/A";
+      document.getElementById("studentName").textContent = name;
+      document.getElementById("studentMatric").textContent = matric;
+
+      // Update attendance count
+      let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
+      document.getElementById("attendedCount").textContent = count;
+
+      // Logout
+      function logout() {
+        localStorage.removeItem("studentName");
+        localStorage.removeItem("studentMatric");
+        localStorage.removeItem("loggedIn");
+        window.location.href = "LIVE.html";
+      }
+
+      // Attendance mark on join
+      function joinLecture(course) {
+        if (name && matric) {
+          let count =
+            parseInt(localStorage.getItem(matric + "_attendance")) || 0;
+          count++;
+          localStorage.setItem(matric + "_attendance", count);
+
+          let total = parseInt(localStorage.getItem("totalAttendance")) || 0;
+          total++;
+          localStorage.setItem("totalAttendance", total);
+
+          localStorage.setItem("lastCourse", course);
+        }
+      }
+    </script>
+    <footer class="site-footer">
+      <div class="footer-container">
+        <!-- School Logo & Info -->
+        <div class="footer-section">
+          <img src="./assets/jpts_2-removebg-preview.png" alt="School Logo" class="footer-logo">
+          <p><strong>JPTS Int'l</strong><br>
+          Lagos, Nigeria</p>
+        </div>
+    
+        <!-- Project Designer Info -->
+        <div class="footer-section">
+          <h4>Project By</h4>
+          <p>Designed by: Yinka</p>
+          <a href="https://linktr.ee/yourusername" target="_blank">My Linktree</a>
+        </div>
+    
+        <!-- Contact -->
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <p>Email: <a href="mailto:yinkasam1337@gmail.com">yinkasam1337@gmail.com</a></p>
+        </div>
+    
+        <!-- Credits -->
+        <div class="footer-section">
+          <h4>Credits</h4>
+          <p>Powered by <a href="" target="_blank">blueline tech</a></p>
+        </div>
+      </div>
+    
+      <div class="footer-bottom">
+        <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
+      </div>
+    </footer>
+  </body>
+</html>

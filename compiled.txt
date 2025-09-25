@@ -1,0 +1,8 @@
+LIVE.html, lecturerpg.html, studentpg.html, GPTindex.html, and GPT.css
+
+// Get saved links from lecturer
+let courseLinks = JSON.parse(localStorage.getItem("courseLinks") || "{}");
+
+// Pick the right link (or fallback)
+document.getElementById("streamFrame").src = courseLinks[course] || "https://www.facebook.com/plugins/video.php?href=DEFAULT_LINK";
+lecturerpg.html, studentpg.html, GPTindex.html, and GPT.css

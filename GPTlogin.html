@@ -1,0 +1,91 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./GPT.css">
+  <title>Login</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Student Login</h1>
+    <label for="studentName">Full Name</label>
+    <input type="text" id="studentName" placeholder="e.g. Yinka Adewale" required>
+    
+    
+    <label for="studentMatric">Matric Number</label>
+    <input type="text" id="studentMatric" placeholder="e.g. 103123" required>
+    
+    
+    <button onclick="login()">Login</button>
+  </div>
+<script>
+    function login(){
+    const name = document.getElementById('studentName').value.trim();
+    const matric = document.getElementById('studentMatric').value.trim();
+    if(!name || !matric){
+    alert('Please enter your full name and matric number.');
+    return;
+    }
+  
+  
+  // Persist session flags
+  localStorage.setItem('loggedIn', 'true');
+  localStorage.setItem('studentName', name);
+  localStorage.setItem('studentMatric', matric);
+  
+  
+  // Initialise per-student attendance counter if missing
+  const key = matric + '_attendance';
+  if(localStorage.getItem(key) === null){
+  localStorage.setItem(key, '0');
+  }
+  
+  
+  // Maintain a mapping of matric -> name for CSV on lecturer page
+  const map = JSON.parse(localStorage.getItem('studentNameByMatric') || '{}');
+  map[matric] = name;
+  localStorage.setItem('studentNameByMatric', JSON.stringify(map));
+  
+  
+  // Go to lecture list (home)
+  window.location.href = 'GPTindex.html';
+  }
+  
+</script>
+</body> 
+<footer class="site-footer">
+  <div class="footer-container">
+    <!-- School Logo & Info -->
+    <div class="footer-section">
+      <img src="logo.png" alt="School Logo" class="footer-logo">
+      <p><strong>JPTS Int'l</strong><br>
+      Lagos, Nigeria</p>
+    </div>
+
+    <!-- Project Designer Info -->
+    <div class="footer-section">
+      <h4>Project By</h4>
+      <p>Designed by: Yinka</p>
+      <a href="https://linktr.ee/yourusername" target="_blank">My Linktree</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: <a href="mailto:yinkasam1337@gmail.com">yinnkasam1337@gmail.com</a></p>
+    </div>
+
+    <!-- Credits -->
+    <div class="footer-section">
+      <h4>Credits</h4>
+      <p>Powered by <a href="" target="_blank">blueline tech</a></p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 JPTS Int'l | All Rights Reserved</p>
+  </div>
+</footer>
+</html>
