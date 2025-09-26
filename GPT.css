@@ -102,105 +102,6 @@ button:hover {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-
-
-/* === AUTH PAGE (LIVE.html) === */
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #0056b3, #0099cc);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  color: #333;
-}
-
-.auth-wrapper {
-  width: 400px;
-  background: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.form-box {
-  display: none;
-}
-
-.form-box.active,
-.form-box.login {
-  display: block;
-}
-
-.form-box h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #0056b3;
-}
-
-.input-box {
-  margin-bottom: 15px;
-}
-
-.input-box label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.input-box input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: border-color 0.3s;
-}
-
-.input-box input:focus {
-  border-color: #0056b3;
-  outline: none;
-}
-
-.auth-btn {
-  background: #0056b3;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  width: 100%;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 10px;
-}
-
-.auth-btn:hover {
-  background: #004494;
-}
-
-.switch {
-  margin-top: 15px;
-  font-size: 14px;
-  text-align: center;
-}
-
-.switch a {
-  color: #0056b3;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.switch a:hover {
-  text-decoration: underline;
-}
-
-/* Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 /* ===== Student Card ===== */
 .student-card {
@@ -486,5 +387,6 @@ body {
 .footer-section a:hover {
   text-decoration: underline;
 }
+
 
 
