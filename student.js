@@ -1,6 +1,17 @@
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { collection, query, orderBy, limit, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  doc,
+  getDoc,
+  onSnapshot,
+  addDoc,
+  serverTimestamp,
+  where,
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Protect the page
 onAuthStateChanged(auth, (user) => {
@@ -28,7 +39,7 @@ async function loadLecture() {
 
     if (docSnap.exists()) {
       const lecture = docSnap.data();
-      renderLecture(lecture);
+      renderLecture(lecture, lectureId);
     } else {
       titleEl.textContent = "Lecture not found.";
     }
@@ -37,8 +48,9 @@ async function loadLecture() {
     const q = query(collection(db, "lectures"), orderBy("createdAt", "desc"), limit(1));
     onSnapshot(q, (snapshot) => {
       if (!snapshot.empty) {
-        const lecture = snapshot.docs[0].data();
-        renderLecture(lecture);
+        const lectureDoc = snapshot.docs[0];
+        const lecture = lectureDoc.data();
+        renderLecture(lecture, lectureDoc.id);
       } else {
         titleEl.textContent = "No live lecture available right now.";
       }
@@ -47,35 +59,53 @@ async function loadLecture() {
 }
 
 // === Render lecture to DOM ===
-function renderLecture(lecture) {
-  titleEl.textContent = `Now Streaming: ${lecture.title} (${lecture.code})`;
-  detailsEl.textContent = `Lecturer: ${lecture.lecturer}`;
+function renderLecture(lecture, lectureId) {
+  titleEl.textContent = Now Streaming: ${lecture.title} (${lecture.code});
+  detailsEl.textContent = Lecturer: ${lecture.lecturer};
   frameEl.src = lecture.link;
 
   // Attendance increment
-  markAttendance();
+  markAttendance(lectureId, lecture);
 }
 
 // === Attendance ===
-function markAttendance() {
+async function markAttendance(lectureId, lecture) {
   const user = auth.currentUser;
   if (!user) return;
 
-  const matric = localStorage.getItem("studentMatric") || user.uid;
+  try {
+    // Check if attendance already exists for this student + lecture
+    const q = query(
+      collection(db, "attendance"),
+      where("userId", "==", user.uid),
+      where("lectureId", "==", lectureId)
+    );
 
-  let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
-  if (!sessionStorage.getItem("attendanceMarked")) {
-    count++;
-    localStorage.setItem(matric + "_attendance", count);
-    sessionStorage.setItem("attendanceMarked", "true");
+    onSnapshot(q, async (snapshot) => {
+      if (snapshot.empty) {
+        // First time joining → save attendance
+        await addDoc(collection(db, "attendance"), {
+          userId: user.uid,
+          lectureId,
+          lectureTitle: lecture.title,
+          lectureCode: lecture.code,
+          timestamp: serverTimestamp(),
+        });
+      }
+    });
+
+    // Update attendance counter
+    updateCounter(user.uid);
+  } catch (error) {
+    console.error("Error marking attendance:", error);
   }
-
-  updateCounter(matric);
 }
 
-function updateCounter(matric) {
-  let count = parseInt(localStorage.getItem(matric + "_attendance")) || 0;
-  counterEl.textContent = `Lectures Attended: ${count}`;
+function updateCounter(userId) {
+  const q = query(collection(db, "attendance"), where("userId", "==", userId));
+  onSnapshot(q, (snapshot) => {
+    counterEl.textContent = Lectures Attended: ${snapshot.size};
+  });
 }
 
 // === Logout ===
