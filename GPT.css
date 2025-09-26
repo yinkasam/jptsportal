@@ -275,89 +275,110 @@ button:hover {
   }
 }
 
-/* login page */
-
-body {
-  background-color: #f31496;
-  font-family:Arial, Helvetica, sans-serif;
-}
-
-#login {
-  font-size: 28px;
-}
-
-.box {
-  background-color: rgb(233, 237, 240);
-  width: 500px;
-  margin: 100px auto;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.822);
-  border-radius: 2.5px;
-}
-
-.box h2 {
-  padding-top: 20px;
-  padding-left: 20px;
-}
-
-.box form {
-  display: flex;
-  flex-direction: column;
-  padding: 0px 20px;
-}
-
-.box form a.forget {
+/* === LOGIN PAGE === */
+.login-header {
   text-align: center;
-  margin-bottom: 15px;
+  margin-top: 30px;
+  animation: fadeInDown 1s ease-in-out;
+}
+.login-logo {
+  height: 80px;
+  display: block;
+  margin: 0 auto 10px;
+}
+.login-header h1 {
+  font-size: 26px;
+  color: #2b3a67;
+  font-weight: bold;
 }
 
-.btnGroup {
+.auth-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 75vh;
+  padding: 20px;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+}
+
+.auth-card h2 {
+  text-align: center;
   margin-bottom: 20px;
-  background-color:transparent;
+  color: #f31496;
 }
 
-.box form input {
-  padding: 10px 4px;
-  margin: 10px;
-  border-top: 0;
-  border-left: 0;
-  border-right: 0;
-  background-color: #e9edf0;
+.auth-card label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #333;
 }
 
-.box form a.forget{
-  margin: 30px;
-  color: #424242;
+.auth-card input,
+.auth-card select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
-.forget{
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background: #f31496;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.auth-btn:hover {
+  background: #c80d76;
+}
+
+.toggle-auth {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.toggle-auth a {
+  color: #2b3a67;
+  font-weight: bold;
   text-decoration: none;
 }
 
-.forget:hover{
-  text-decoration: solid;
+.toggle-auth a:hover {
   text-decoration: underline;
 }
 
-.SIGNIN-btn {
-  background-color: #f31496;
-  padding: 10px 30px; 
-  height: 45px;
-  color: white;
-  transition: 0.5s;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-.SIGNIN-btn:hover {
-  background-color: #060b1f;
+/* Animations */
+.fade-in {
+  animation: fadeInUp 0.8s ease-in-out;
 }
 
-.RESGISTER-btn:hover {
-  background-color: #424242;
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* footer */
@@ -403,6 +424,7 @@ body {
 .footer-section a:hover {
   text-decoration: underline;
 }
+
 
 
 
