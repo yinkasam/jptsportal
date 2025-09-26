@@ -218,6 +218,24 @@ button:hover {
   background-color: #1a2542;
 }
 
+.end-btn {
+  background-color: #f31496; /* pink for end button */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-left: 10px;
+}
+
+.end-btn:hover {
+  background-color: #b9058c; /* darker pink hover */
+  transform: translateY(-2px);
+}
+
+
 /* Lecture streaming section */
 .lecture-container {
   text-align: center;
@@ -385,6 +403,7 @@ body {
 .footer-section a:hover {
   text-decoration: underline;
 }
+
 
 
 
