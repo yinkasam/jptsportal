@@ -4,18 +4,21 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
   background: #f5f5f5;
   color: #333;
-  scroll-margin-bottom: 466px;
 }
+
+/* ===== HEADER ===== */
 .logo-img {
   height: 75px;
   margin-right: 10px;
   vertical-align: middle;
 }
+
 header {
   background: #e6e1e4;
   color: #141212;
@@ -24,18 +27,22 @@ header {
   justify-content: space-between;
   align-items: center;
 }
+
 header .logo {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
 nav a {
   color: #0c0b0b;
   margin-left: 1rem;
   text-decoration: none;
 }
+
 nav a:hover {
   text-decoration: underline;
 }
+
 .container {
   padding: 2rem;
 }
@@ -43,18 +50,16 @@ nav a:hover {
 /* ===== Fixed Attendance Counter ===== */
 .fixed-counter {
   position: fixed;
-  top: 100px;          /* push it down from the top header */
-  right: 20px;         /* stick it to the right edge */
+  top: 100px;
+  right: 20px;
   background: #2b3a67;
   color: white;
   padding: 10px 20px;
   border-radius: 6px;
   font-size: 14px;
   box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-  z-index: 1000;       /* make sure it floats above other elements */
+  z-index: 1000;
 }
-
-
 
 button {
   background: #f31496;
@@ -63,9 +68,12 @@ button {
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
+
 button:hover {
   background: #b9058c;
+  transform: scale(1.05);
 }
 
 .stream-box iframe {
@@ -76,8 +84,7 @@ button:hover {
   border-radius: 10px;
 }
 
-
-/* Container for the lecture list */
+/* ===== Lecture Cards ===== */
 .lecture-list {
   max-width: 900px;
   margin: 40px auto;
@@ -87,7 +94,6 @@ button:hover {
   gap: 20px;
 }
 
-/* Individual lecture card */
 .lecture-card {
   background: #fff;
   border-radius: 10px;
@@ -98,9 +104,40 @@ button:hover {
 }
 
 .lecture-card:hover {
-  transform: translateY(-20px) translateX(-12px);
+  transform: translateY(-10px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
+
+.lecture-card h3 {
+  font-size: 20px;
+  color: #262c4b;
+  margin-bottom: 10px;
+}
+
+.lecture-card p {
+  font-size: 14px;
+  color: #555;
+  margin: 5px 0;
+}
+
+.join-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #262c4bda;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.join-btn:hover {
+  background: #060b1f;
+  transform: scale(1.05);
+}
+
 /* ===== Student Card ===== */
 .student-card {
   background: #fff;
@@ -125,57 +162,6 @@ button:hover {
   font-size: 14px;
   color: #555;
 }
-
-/* Lecture title */
-.lecture-card h3 {
-  font-size: 20px;
-  color: #262c4b;
-  margin-bottom: 10px;
-}
-
-/* Small details (lecturer, time, etc.) */
-.lecture-card p {
-  font-size: 14px;
-  color: #555;
-  margin: 5px 0;
-}
-
-/* Join button */
-.join-btn {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #262c4bda;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.5s ease;
-}
-
-.join-btn:hover {
-  background: #060b1f;
-}
-
-.lecture-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;   /* centers items horizontally */
-  margin-top: 40px;
-}
-
-.lecture-container h2 {
-  font-size: 26px;
-  font-weight: bold;
-  color: #f31496;  
-  margin-bottom: 20px;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
 
 /* ===== Lecturer Page Link Box ===== */
 .lecture-link-box {
@@ -211,84 +197,47 @@ button:hover {
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .save-btn:hover {
   background-color: #1a2542;
+  transform: scale(1.05);
 }
 
 .end-btn {
-  background-color: #f31496; /* pink for end button */
+  background-color: #f31496;
   color: white;
   border: none;
   padding: 10px 18px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.3s ease, transform 0.2s ease;
   margin-left: 10px;
+  transition: all 0.3s ease;
 }
 
 .end-btn:hover {
-  background-color: #b9058c; /* darker pink hover */
-  transform: translateY(-2px);
+  background-color: #b9058c;
+  transform: scale(1.05);
 }
 
-
-/* Lecture streaming section */
-.lecture-container {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.lecture-container h2 {
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-  color: #2b3a67;
-}
-
-.stream-box {
-  display: flex;
-  justify-content: center;
-}
-
-
-/* Responsive */
-@media(max-width: 768px){
-  header { flex-direction: column; }
-  nav { margin-top: 1rem; }
-  .fixed-counter { font-size: 0.9rem; padding: 0.5rem; }
-  .lecture-card:hover {
-    transform: translateY(-25px) translateX(-8px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  }
-}
-
-@media(max-width: 412px){
-  header { flex-direction: column; }
-  nav { margin-top: 1rem; }
-  .fixed-counter { font-size: 0.9rem; padding: 0.5rem; }
-  .lecture-card:hover {
-    transform: translateY(-25px) translateX(-8px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  }
-}
-
-/* === LOGIN PAGE === */
+/* ===== LOGIN PAGE ===== */
 .login-header {
   text-align: center;
   margin-top: 30px;
   animation: fadeInDown 1s ease-in-out;
 }
+
 .login-logo {
   height: 80px;
   display: block;
   margin: 0 auto 10px;
 }
+
 .login-header h1 {
   font-size: 26px;
-  color: #2b3a67;
+  color: #f31496; /* Pink for brand consistency */
   font-weight: bold;
 }
 
@@ -307,7 +256,7 @@ button:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 400px;
-  text-align: left;
+  animation: fadeInUp 0.8s ease-in-out;
 }
 
 .auth-card h2 {
@@ -343,11 +292,12 @@ button:hover {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .auth-btn:hover {
   background: #c80d76;
+  transform: scale(1.03);
 }
 
 .toggle-auth {
@@ -367,10 +317,6 @@ button:hover {
 }
 
 /* Animations */
-.fade-in {
-  animation: fadeInUp 0.8s ease-in-out;
-}
-
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(40px); }
   to { opacity: 1; transform: translateY(0); }
@@ -381,7 +327,7 @@ button:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* footer */
+/* ===== FOOTER ===== */
 .site-footer {
   background: #2b3a67;
   color: #fff;
@@ -424,9 +370,3 @@ button:hover {
 .footer-section a:hover {
   text-decoration: underline;
 }
-
-
-
-
-
-
