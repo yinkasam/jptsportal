@@ -1,7 +1,16 @@
 // index.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { collection, query, orderBy, limit, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  doc,
+  getDoc,
+  where
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Protect the page
 onAuthStateChanged(auth, async (user) => {
@@ -20,9 +29,15 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("studentName").textContent = user.email;
     document.getElementById("studentMatric").textContent = "N/A";
   }
+
+  // === Attendance counter ===
+  const q = query(collection(db, "attendance"), where("userId", "==", user.uid));
+  onSnapshot(q, (snapshot) => {
+    document.getElementById("attendedCount").textContent = snapshot.size;
+  });
 });
 
-// === Fetch and display *latest* lecture ===
+// === Fetch and display latest lecture ===
 const lectureList = document.querySelector(".lecture-list");
 
 // Query Firestore: only the most recent lecture
