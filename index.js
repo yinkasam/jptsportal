@@ -1,7 +1,7 @@
 // index.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { collection, query, orderBy, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { collection, query, orderBy, limit, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Protect the page
 onAuthStateChanged(auth, async (user) => {
@@ -22,23 +22,32 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// === Fetch and display live lectures ===
+// === Fetch and display *latest* lecture ===
 const lectureList = document.querySelector(".lecture-list");
 
-const q = query(collection(db, "lectures"), orderBy("createdAt", "desc"));
+// Query Firestore: only the most recent lecture
+const latestQuery = query(
+  collection(db, "lectures"),
+  orderBy("createdAt", "desc"),
+  limit(1)
+);
 
-onSnapshot(q, (snapshot) => {
-  lectureList.innerHTML = ""; // Clear old list
+onSnapshot(latestQuery, (snapshot) => {
+  lectureList.innerHTML = ""; // Clear old
 
-  snapshot.forEach((doc) => {
-    const lecture = doc.data();
+  if (snapshot.empty) {
+    lectureList.innerHTML = "<p>No live lecture available at the moment.</p>";
+    return;
+  }
 
+  snapshot.forEach((docSnap) => {
+    const lecture = docSnap.data();
     lectureList.innerHTML += `
       <div class="lecture-card">
         <h3>${lecture.title} (${lecture.code})</h3>
         <p>Lecturer: ${lecture.lecturer}</p>
         <p><small>Posted: ${lecture.createdAt?.toDate().toLocaleString() || "N/A"}</small></p>
-        <a href="studentpg.html" class="join-btn">Join Lecture</a>
+        <a href="studentpg.html?id=${docSnap.id}" class="join-btn">Join Lecture</a>
       </div>
     `;
   });
