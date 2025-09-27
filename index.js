@@ -37,26 +37,26 @@ onAuthStateChanged(auth, async (user) => {
   });
 });
 
-// === Fetch and display latest lecture ===
+// === Fetch and display latest 3 lectures ===
 const lectureList = document.querySelector(".lecture-list");
 
-// Query Firestore: only the most recent lecture
 const latestQuery = query(
   collection(db, "lectures"),
   orderBy("createdAt", "desc"),
-  limit(1)
+  limit(3)   // ⬅️ fetch 3 instead of 1
 );
 
 onSnapshot(latestQuery, (snapshot) => {
   lectureList.innerHTML = ""; // Clear old
 
   if (snapshot.empty) {
-    lectureList.innerHTML = "<p>No live lecture available at the moment.</p>";
+    lectureList.innerHTML = "<p>No live lectures available at the moment.</p>";
     return;
   }
 
   snapshot.forEach((docSnap) => {
     const lecture = docSnap.data();
+
     lectureList.innerHTML += `
       <div class="lecture-card">
         <h3>${lecture.title} (${lecture.code})</h3>
@@ -66,4 +66,14 @@ onSnapshot(latestQuery, (snapshot) => {
       </div>
     `;
   });
+
+  // Add link to Past Lectures
+  lectureList.innerHTML += `
+    <div class="lecture-card">
+      <h3>View More Lectures</h3>
+      <p>Browse older lecture recordings</p>
+      <a href="past.html" class="join-btn">Go to Past Lectures</a>
+    </div>
+  `;
 });
+
