@@ -41,7 +41,14 @@ async function loadLecture() {
 
     if (docSnap.exists()) {
       const lecture = docSnap.data();
-      renderLecture(lecture, lectureId);
+
+      if (lecture.status === "live") {
+        renderLecture(lecture, lectureId);
+      } else if (lecture.recordingLink) {
+        renderRecording(lecture);
+      } else {
+        titleEl.textContent = "This lecture has ended. Recording not available.";
+      }
     } else {
       titleEl.textContent = "Lecture not found.";
     }
@@ -66,27 +73,24 @@ async function loadLecture() {
   }
 }
 
-// === Render lecture to DOM ===
+// === Render live lecture ===
 function renderLecture(lecture, lectureId) {
-  titleEl.textContent = `${lecture.status === "live" ? "Now Streaming" : "Lecture Replay"}: ${lecture.title} (${lecture.code})`;
+  titleEl.textContent = `Now Streaming: ${lecture.title} (${lecture.code})`;
   detailsEl.textContent = `Lecturer: ${lecture.lecturer}`;
+  frameEl.src = lecture.link;
 
-  if (lecture.link) {
-    frameEl.src = lecture.link; // Show either live stream or recording
-  } else {
-    frameEl.src = "";
-    frameEl.insertAdjacentHTML("afterend", "<p>This lecture has ended and no recording was provided.</p>");
-  }
+  // Attendance increment
+  markAttendance(lectureId, lecture);
 
-  // Attendance only for live lectures
-  if (lecture.status === "live") {
-    markAttendance(lectureId, lecture);
-  }
+  // Start chat for this lecture
+  loadChat(lectureId);
+}
 
-  // Start chat for live lectures only
-  if (lecture.status === "live") {
-    loadChat(lectureId);
-  }
+// === Render recording for past lecture ===
+function renderRecording(lecture) {
+  titleEl.textContent = `Recording: ${lecture.title} (${lecture.code})`;
+  detailsEl.textContent = `Lecturer: ${lecture.lecturer}`;
+  frameEl.src = lecture.recordingLink;
 }
 
 // === Attendance ===
@@ -95,6 +99,7 @@ async function markAttendance(lectureId, lecture) {
   if (!user) return;
 
   try {
+    // Check if attendance already exists
     const q = query(
       collection(db, "attendance"),
       where("userId", "==", user.uid),
@@ -103,6 +108,7 @@ async function markAttendance(lectureId, lecture) {
 
     const snapshot = await getDocs(q);
     if (snapshot.empty) {
+      // First time joining → save attendance
       await addDoc(collection(db, "attendance"), {
         userId: user.uid,
         lectureId,
@@ -112,6 +118,7 @@ async function markAttendance(lectureId, lecture) {
       });
     }
 
+    // Update attendance counter
     updateCounter(user.uid);
   } catch (error) {
     console.error("Error marking attendance:", error);
@@ -125,7 +132,7 @@ function updateCounter(userId) {
   });
 }
 
-// === CHAT FEATURE (only for live lectures) ===
+// === CHAT FEATURE ===
 const chatMessagesEl = document.getElementById("chatMessages");
 const chatInputEl = document.getElementById("chatMessage");
 
@@ -146,6 +153,7 @@ function loadChat(lectureId) {
       chatMessagesEl.appendChild(msg);
     });
 
+    // Auto-scroll to bottom
     chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
   });
 }
@@ -156,6 +164,7 @@ window.sendMessage = async function () {
   const message = chatInputEl.value.trim();
   if (!message) return;
 
+  // Get user name from Firestore (or fallback to email)
   let name = user.email;
   const userDoc = await getDoc(doc(db, "users", user.uid));
   if (userDoc.exists()) {
@@ -170,7 +179,7 @@ window.sendMessage = async function () {
     timestamp: serverTimestamp()
   });
 
-  chatInputEl.value = "";
+  chatInputEl.value = ""; // clear input
 };
 
 // === Logout ===
