@@ -11,6 +11,7 @@ import {
   addDoc,
   serverTimestamp,
   where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Protect the page
@@ -60,8 +61,8 @@ async function loadLecture() {
 
 // === Render lecture to DOM ===
 function renderLecture(lecture, lectureId) {
-  titleEl.textContent = Now Streaming: ${lecture.title} (${lecture.code});
-  detailsEl.textContent = Lecturer: ${lecture.lecturer};
+  titleEl.textContent = `Now Streaming: ${lecture.title} (${lecture.code})`;
+  detailsEl.textContent = `Lecturer: ${lecture.lecturer}`;
   frameEl.src = lecture.link;
 
   // Attendance increment
@@ -81,18 +82,17 @@ async function markAttendance(lectureId, lecture) {
       where("lectureId", "==", lectureId)
     );
 
-    onSnapshot(q, async (snapshot) => {
-      if (snapshot.empty) {
-        // First time joining → save attendance
-        await addDoc(collection(db, "attendance"), {
-          userId: user.uid,
-          lectureId,
-          lectureTitle: lecture.title,
-          lectureCode: lecture.code,
-          timestamp: serverTimestamp(),
-        });
-      }
-    });
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+      // First time joining → save attendance
+      await addDoc(collection(db, "attendance"), {
+        userId: user.uid,
+        lectureId,
+        lectureTitle: lecture.title,
+        lectureCode: lecture.code,
+        timestamp: serverTimestamp(),
+      });
+    }
 
     // Update attendance counter
     updateCounter(user.uid);
@@ -104,7 +104,7 @@ async function markAttendance(lectureId, lecture) {
 function updateCounter(userId) {
   const q = query(collection(db, "attendance"), where("userId", "==", userId));
   onSnapshot(q, (snapshot) => {
-    counterEl.textContent = Lectures Attended: ${snapshot.size};
+    counterEl.textContent = `Lectures Attended: ${snapshot.size}`;
   });
 }
 
