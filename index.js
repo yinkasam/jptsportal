@@ -12,7 +12,7 @@ import {
   where
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-// Protect the page
+// === Protect the page ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "LIVE.html";
@@ -37,17 +37,18 @@ onAuthStateChanged(auth, async (user) => {
   });
 });
 
-// === Fetch and display latest 3 lectures ===
+// === Fetch and display the latest 3 live lectures ===
 const lectureList = document.querySelector(".lecture-list");
 
+// Query Firestore: latest 3 live lectures
 const latestQuery = query(
   collection(db, "lectures"),
   orderBy("createdAt", "desc"),
-  limit(3)   // ⬅️ fetch 3 instead of 1
+  limit(3)   // fetch 3 instead of 1
 );
 
 onSnapshot(latestQuery, (snapshot) => {
-  lectureList.innerHTML = ""; // Clear old
+  lectureList.innerHTML = ""; // Clear old content
 
   if (snapshot.empty) {
     lectureList.innerHTML = "<p>No live lectures available at the moment.</p>";
@@ -57,17 +58,20 @@ onSnapshot(latestQuery, (snapshot) => {
   snapshot.forEach((docSnap) => {
     const lecture = docSnap.data();
 
-    lectureList.innerHTML += `
-      <div class="lecture-card">
-        <h3>${lecture.title} (${lecture.code})</h3>
-        <p>Lecturer: ${lecture.lecturer}</p>
-        <p><small>Posted: ${lecture.createdAt?.toDate().toLocaleString() || "N/A"}</small></p>
-        <a href="studentpg.html?id=${docSnap.id}" class="join-btn">Join Lecture</a>
-      </div>
-    `;
+    // Only show lectures that are still live
+    if (lecture.status === "live") {
+      lectureList.innerHTML += `
+        <div class="lecture-card">
+          <h3>${lecture.title} (${lecture.code})</h3>
+          <p>Lecturer: ${lecture.lecturer}</p>
+          <p><small>Posted: ${lecture.createdAt?.toDate().toLocaleString() || "N/A"}</small></p>
+          <a href="studentpg.html?id=${docSnap.id}" class="join-btn">Join Lecture</a>
+        </div>
+      `;
+    }
   });
 
-  // Add link to Past Lectures
+  // Add "Go to Past Lectures" card
   lectureList.innerHTML += `
     <div class="lecture-card">
       <h3>View More Lectures</h3>
@@ -76,4 +80,3 @@ onSnapshot(latestQuery, (snapshot) => {
     </div>
   `;
 });
-
