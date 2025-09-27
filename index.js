@@ -12,7 +12,7 @@ import {
   where
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-// === Protect the page ===
+// Protect the page
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "LIVE.html";
@@ -37,18 +37,17 @@ onAuthStateChanged(auth, async (user) => {
   });
 });
 
-// === Fetch and display the latest 3 live lectures ===
-const lectureList = document.querySelector(".lecture-list");
+// === Fetch and display latest 3 lectures ===
+const lectureList = document.getElementById("lectureList");
 
-// Query Firestore: latest 3 live lectures
 const latestQuery = query(
   collection(db, "lectures"),
   orderBy("createdAt", "desc"),
-  limit(3)   // fetch 3 instead of 1
+  limit(3)   // fetch latest 3
 );
 
 onSnapshot(latestQuery, (snapshot) => {
-  lectureList.innerHTML = ""; // Clear old content
+  lectureList.innerHTML = ""; // ✅ Always clear first
 
   if (snapshot.empty) {
     lectureList.innerHTML = "<p>No live lectures available at the moment.</p>";
@@ -58,7 +57,7 @@ onSnapshot(latestQuery, (snapshot) => {
   snapshot.forEach((docSnap) => {
     const lecture = docSnap.data();
 
-    // Only show lectures that are still live
+    // Only show live lectures on homepage
     if (lecture.status === "live") {
       lectureList.innerHTML += `
         <div class="lecture-card">
@@ -71,7 +70,7 @@ onSnapshot(latestQuery, (snapshot) => {
     }
   });
 
-  // Add "Go to Past Lectures" card
+  // Always include link to past lectures
   lectureList.innerHTML += `
     <div class="lecture-card">
       <h3>View More Lectures</h3>
