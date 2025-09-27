@@ -108,6 +108,69 @@ function updateCounter(userId) {
   });
 }
 
+// === CHAT FEATURE ===
+const chatMessagesEl = document.getElementById("chatMessages");
+const chatInputEl = document.getElementById("chatMessage");
+
+function loadChat(lectureId) {
+  const q = query(
+    collection(db, "chats"),
+    where("lectureId", "==", lectureId),
+    orderBy("timestamp", "asc")
+  );
+
+  onSnapshot(q, (snapshot) => {
+    chatMessagesEl.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const chat = docSnap.data();
+      const msg = document.createElement("p");
+      msg.innerHTML = `<strong>${chat.name}:</strong> ${chat.message}`;
+      chatMessagesEl.appendChild(msg);
+    });
+
+    // Auto-scroll to bottom
+    chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+  });
+}
+
+window.sendMessage = async function () {
+  const user = auth.currentUser;
+  if (!user) return;
+  const message = chatInputEl.value.trim();
+  if (!message) return;
+
+  // Get user name from Firestore (or fallback to email)
+  let name = user.email;
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  if (userDoc.exists()) {
+    name = userDoc.data().name || user.email;
+  }
+
+  await addDoc(collection(db, "chats"), {
+    userId: user.uid,
+    name,
+    lectureId: lectureId || "general", // link message to current lecture
+    message,
+    timestamp: serverTimestamp()
+  });
+
+  chatInputEl.value = ""; // clear input
+};
+
+// Call this inside renderLecture()
+function renderLecture(lecture, lectureId) {
+  titleEl.textContent = `Now Streaming: ${lecture.title} (${lecture.code})`;
+  detailsEl.textContent = `Lecturer: ${lecture.lecturer}`;
+  frameEl.src = lecture.link;
+
+  // Attendance increment
+  markAttendance(lectureId, lecture);
+
+  // Start chat for this lecture
+  loadChat(lectureId);
+}
+
 // === Logout ===
 window.logout = function () {
   signOut(auth).then(() => {
