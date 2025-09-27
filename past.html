@@ -16,13 +16,15 @@
     <nav>
       <a href="./index.html">Home</a>
       <a href="./studentpg.html">Lectures</a>
-      <a href="./past.html">Past Lectures</a>
+      <a href="./past.html" class="active">Past Lectures</a>
       <a href="#" onclick="logout()">Logout</a>
     </nav>
   </header>
 
   <div class="container">
     <h2>Past Lectures Archive</h2>
+    <p style="text-align:center; color:#555;">Browse all ended lecture sessions below 👇</p>
+    
     <div id="pastLectures" class="lecture-list">
       <p>Loading past lectures...</p>
     </div>
@@ -53,6 +55,7 @@
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script type="module" src="./firebase.js"></script>
   <script type="module" src="./past.js"></script>
 </body>
