@@ -1,7 +1,7 @@
 // past.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { collection, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Protect the page
 onAuthStateChanged(auth, (user) => {
@@ -10,10 +10,14 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// === Load all past lectures ===
+// === Load all *ended* past lectures ===
 const pastLectures = document.getElementById("pastLectures");
 
-const q = query(collection(db, "lectures"), orderBy("createdAt", "desc"));
+const q = query(
+  collection(db, "lectures"),
+  where("status", "==", "ended"), // ✅ only past lectures
+  orderBy("createdAt", "desc")
+);
 
 onSnapshot(q, (snapshot) => {
   pastLectures.innerHTML = "";
@@ -38,7 +42,7 @@ onSnapshot(q, (snapshot) => {
 });
 
 // === Logout ===
-window.logout = function() {
+window.logout = function () {
   signOut(auth).then(() => {
     window.location.href = "LIVE.html";
   }).catch((error) => {
