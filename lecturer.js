@@ -1,15 +1,15 @@
 // lecturer.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  updateDoc, 
-  doc, 
-  query, 
-  where, 
-  getDocs 
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  updateDoc,
+  doc,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Track active lecture
@@ -18,7 +18,7 @@ let activeLectureId = null;
 // ========== Protect the page ==========
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "LIVE.html"; 
+    window.location.href = "LIVE.html";
   }
 });
 
@@ -68,21 +68,17 @@ async function endLecture() {
   }
 
   try {
-    // Ask lecturer for the recording link
-    const recordingLink = prompt("Enter the recording link (YouTube, Drive, etc.):");
+    // Ask for recording link
+    const recordingLink = prompt("Enter recording link (YouTube/Facebook/etc.) or leave blank:");
 
-    if (!recordingLink) {
-      alert("Recording link is required to end the lecture.");
-      return;
+    const updateData = { status: "ended" };
+    if (recordingLink && recordingLink.trim() !== "") {
+      updateData.recordingLink = recordingLink.trim();
     }
 
-    // ✅ Update Firestore: mark ended + replace link with recording
-    await updateDoc(doc(db, "lectures", activeLectureId), { 
-      status: "ended",
-      link: recordingLink 
-    });
+    await updateDoc(doc(db, "lectures", activeLectureId), updateData);
 
-    alert("Lecture has ended and recording link is now available in Past Lectures.");
+    alert("Lecture has ended and is now in Past Lectures.");
     activeLectureId = null;
   } catch (error) {
     console.error("Error ending lecture: ", error);
