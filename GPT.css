@@ -344,6 +344,14 @@ button:hover {
 .toggle-auth a:hover {
   text-decoration: underline;
 }
+.stream-box iframe {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 10px;
+}
 
 /* === ANIMATIONS === */
 .fade-in {
@@ -416,3 +424,4 @@ button:hover {
   nav { margin-top: 1rem; }
   .fixed-counter { font-size: 0.9rem; padding: 0.5rem; }
 }
+
