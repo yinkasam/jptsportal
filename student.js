@@ -45,7 +45,13 @@ async function loadLecture() {
       if (lecture.status === "live") {
         renderLecture(lecture, lectureId);
       } else {
-        titleEl.textContent = "This lecture has ended.";
+        // Lecture ended → show message + link
+        titleEl.innerHTML = `
+          This lecture has ended. <br>
+          <a href="past.html" style="color:blue; text-decoration:underline;">
+            View it in Past Lectures
+          </a>
+        `;
       }
     } else {
       titleEl.textContent = "Lecture not found.";
