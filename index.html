@@ -35,13 +35,15 @@
         </p>
       </div>
     </div>
-  <h2>Now Streaming</h2>
-<div id="latestLecture" class="lecture-list"></div>
 
-<div style="margin-top:20px; text-align:center;">
-  <a href="past.html" class="join-btn">See Past Lectures</a>
-</div>
+    <h2>Now Streaming</h2>
+    <!-- ✅ Fixed ID so it matches index.js -->
+    <div id="lectureList" class="lecture-list"></div>
 
+    <div style="margin-top:20px; text-align:center;">
+      <a href="past.html" class="join-btn">See Past Lectures</a>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-container">
@@ -68,6 +70,10 @@
     </div>
   </footer>
 
+  <!-- Firebase + Scripts -->
+  <script type="module" src="./firebase.js"></script>
+  <script type="module" src="./index.js"></script>
+
   <script>
     // Redirect if not logged in
     if (!localStorage.getItem("loggedIn")) {
@@ -91,36 +97,6 @@
       localStorage.removeItem("loggedIn");
       window.location.href = "LIVE.html";
     }
-
-    // Load dynamic lectures
-    function loadLectures() {
-      const lectures = JSON.parse(localStorage.getItem("lectures") || "[]");
-      const container = document.getElementById("lectureList");
-      container.innerHTML = "";
-
-      if (lectures.length === 0) {
-        container.innerHTML = "<p>No live lectures available at the moment.</p>";
-        return;
-      }
-
-      lectures.forEach((lecture, index) => {
-        const card = document.createElement("div");
-        card.className = "lecture-card";
-        card.innerHTML = `
-          <h3>${lecture.title} (${lecture.code})</h3>
-          <p>Lecturer: ${lecture.lecturer}</p>
-          <a href="studentpg.html?id=${index}" class="join-btn">Join Lecture</a>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    loadLectures()
   </script>
-  <script type="module" src="./firebase.js"></script>
-<script type="module" src="./index.js"></script>
-
 </body>
 </html>
-
-
