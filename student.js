@@ -1,3 +1,4 @@
+// student.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import {
@@ -40,13 +41,24 @@ async function loadLecture() {
 
     if (docSnap.exists()) {
       const lecture = docSnap.data();
-      renderLecture(lecture, lectureId);
+
+      if (lecture.status === "live") {
+        renderLecture(lecture, lectureId);
+      } else {
+        titleEl.textContent = "This lecture has ended.";
+      }
     } else {
       titleEl.textContent = "Lecture not found.";
     }
   } else {
-    // Load latest lecture (live)
-    const q = query(collection(db, "lectures"), orderBy("createdAt", "desc"), limit(1));
+    // Load latest live lecture
+    const q = query(
+      collection(db, "lectures"),
+      where("status", "==", "live"),
+      orderBy("createdAt", "desc"),
+      limit(1)
+    );
+
     onSnapshot(q, (snapshot) => {
       if (!snapshot.empty) {
         const lectureDoc = snapshot.docs[0];
@@ -67,6 +79,9 @@ function renderLecture(lecture, lectureId) {
 
   // Attendance increment
   markAttendance(lectureId, lecture);
+
+  // Start chat for this lecture
+  loadChat(lectureId);
 }
 
 // === Attendance ===
@@ -75,7 +90,7 @@ async function markAttendance(lectureId, lecture) {
   if (!user) return;
 
   try {
-    // Check if attendance already exists for this student + lecture
+    // Check if attendance already exists
     const q = query(
       collection(db, "attendance"),
       where("userId", "==", user.uid),
@@ -150,26 +165,13 @@ window.sendMessage = async function () {
   await addDoc(collection(db, "chats"), {
     userId: user.uid,
     name,
-    lectureId: lectureId || "general", // link message to current lecture
+    lectureId: lectureId || "general",
     message,
     timestamp: serverTimestamp()
   });
 
   chatInputEl.value = ""; // clear input
 };
-
-// Call this inside renderLecture()
-function renderLecture(lecture, lectureId) {
-  titleEl.textContent = `Now Streaming: ${lecture.title} (${lecture.code})`;
-  detailsEl.textContent = `Lecturer: ${lecture.lecturer}`;
-  frameEl.src = lecture.link;
-
-  // Attendance increment
-  markAttendance(lectureId, lecture);
-
-  // Start chat for this lecture
-  loadChat(lectureId);
-}
 
 // === Logout ===
 window.logout = function () {
