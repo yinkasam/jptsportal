@@ -41,6 +41,18 @@
       </iframe>
     </div>
   </div>
+    <!-- Chat Section -->
+  <div class="chat-container">
+    <h3>Live Chat</h3>
+    <div id="chatMessages" class="chat-messages">
+      <p>Loading chat...</p>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" id="chatMessage" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
 
   <!-- Firebase + Student Logic -->
   <script type="module" src="./firebase.js"></script>
@@ -80,3 +92,4 @@
   </footer>
 </body>
 </html>
+
