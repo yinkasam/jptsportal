@@ -68,8 +68,21 @@ async function endLecture() {
   }
 
   try {
-    await updateDoc(doc(db, "lectures", activeLectureId), { status: "ended" });
-    alert("Lecture has ended and is now in Past Lectures.");
+    // Ask lecturer for the recording link
+    const recordingLink = prompt("Enter the recording link (YouTube, Drive, etc.):");
+
+    if (!recordingLink) {
+      alert("Recording link is required to end the lecture.");
+      return;
+    }
+
+    // ✅ Update Firestore: mark ended + replace link with recording
+    await updateDoc(doc(db, "lectures", activeLectureId), { 
+      status: "ended",
+      link: recordingLink 
+    });
+
+    alert("Lecture has ended and recording link is now available in Past Lectures.");
     activeLectureId = null;
   } catch (error) {
     console.error("Error ending lecture: ", error);
