@@ -1,15 +1,24 @@
 // lecturer.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { collection, addDoc, serverTimestamp, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  updateDoc, 
+  doc, 
+  query, 
+  where, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-// Track the active lecture ID for the lecturer
+// Track active lecture
 let activeLectureId = null;
 
 // ========== Protect the page ==========
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "LIVE.html"; // Redirect to login if not authenticated
+    window.location.href = "LIVE.html"; 
   }
 });
 
@@ -26,17 +35,24 @@ async function saveLecture() {
   }
 
   try {
-    // Add lecture to Firestore with status = live
+    // ✅ End any existing "live" lectures
+    const liveQuery = query(collection(db, "lectures"), where("status", "==", "live"));
+    const liveSnap = await getDocs(liveQuery);
+    for (const l of liveSnap.docs) {
+      await updateDoc(doc(db, "lectures", l.id), { status: "ended" });
+    }
+
+    // ✅ Add the new lecture as "live"
     const docRef = await addDoc(collection(db, "lectures"), {
       title,
       code,
       lecturer,
       link,
-      status: "live", // ✅ mark as live
+      status: "live",
       createdAt: serverTimestamp()
     });
 
-    activeLectureId = docRef.id; // Save current live lecture ID
+    activeLectureId = docRef.id;
     alert("Lecture is now live! Students can view it on their portal.");
   } catch (error) {
     console.error("Error saving lecture: ", error);
@@ -52,10 +68,9 @@ async function endLecture() {
   }
 
   try {
-    const docRef = doc(db, "lectures", activeLectureId);
-    await updateDoc(docRef, { status: "ended" }); // ✅ mark as ended
+    await updateDoc(doc(db, "lectures", activeLectureId), { status: "ended" });
     alert("Lecture has ended and is now in Past Lectures.");
-    activeLectureId = null; // Reset
+    activeLectureId = null;
   } catch (error) {
     console.error("Error ending lecture: ", error);
     alert("Failed to end lecture. Please try again.");
@@ -71,7 +86,7 @@ function logout() {
   });
 }
 
-// Expose functions to HTML
+// Expose functions
 window.saveLecture = saveLecture;
-window.endLecture = endLecture; // ✅ expose endLecture
+window.endLecture = endLecture;
 window.logout = logout;
