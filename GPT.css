@@ -344,15 +344,6 @@ button:hover {
 .toggle-auth a:hover {
   text-decoration: underline;
 }
-.stream-box iframe {
-  width: 100%;
-  max-width: 900px;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  border: none;
-  border-radius: 10px;
-}
-
 /* === ANIMATIONS === */
 .fade-in {
   animation: fadeInUp 0.8s ease-in-out;
@@ -417,11 +408,28 @@ button:hover {
   header { flex-direction: column; }
   nav { margin-top: 1rem; }
   .fixed-counter { font-size: 0.9rem; padding: 0.5rem; }
+  .stream-box iframe {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 10px;
+}
 }
 
 @media(max-width: 412px) {
   header { flex-direction: column; }
   nav { margin-top: 1rem; }
   .fixed-counter { font-size: 0.9rem; padding: 0.5rem; }
+  .stream-box iframe {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 10px;
 }
+}
+
 
