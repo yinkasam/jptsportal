@@ -1,20 +1,21 @@
 // past.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { collection, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-// === Protect the page ===
+// Protect the page
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "LIVE.html";
   }
 });
 
-// === Load all past lectures (status=ended OR no status) ===
+// === Load all *ended* past lectures ===
 const pastLectures = document.getElementById("pastLectures");
 
 const q = query(
   collection(db, "lectures"),
+  where("status", "==", "ended"), // ✅ only past lectures
   orderBy("createdAt", "desc")
 );
 
@@ -29,17 +30,18 @@ onSnapshot(q, (snapshot) => {
   snapshot.forEach((docSnap) => {
     const lecture = docSnap.data();
 
-    // ✅ Show only lectures that are "ended" OR old docs with no status
-    if (lecture.status === "ended" || !lecture.status) {
-      pastLectures.innerHTML += `
-        <div class="lecture-card">
-          <h3>${lecture.title} (${lecture.code})</h3>
-          <p>Lecturer: ${lecture.lecturer}</p>
-          <p><small>Posted: ${lecture.createdAt?.toDate().toLocaleString() || "N/A"}</small></p>
-          <a href="studentpg.html?id=${docSnap.id}" class="join-btn">Watch Again</a>
-        </div>
-      `;
-    }
+    pastLectures.innerHTML += `
+      <div class="lecture-card">
+        <h3>${lecture.title} (${lecture.code})</h3>
+        <p>Lecturer: ${lecture.lecturer}</p>
+        <p><small>Posted: ${lecture.createdAt?.toDate().toLocaleString() || "N/A"}</small></p>
+
+        ${lecture.link
+          ? `<a href="studentpg.html?id=${docSnap.id}" class="join-btn">Watch Recording</a>`
+          : `<p style="color:#777;">No recording available for this lecture.</p>`
+        }
+      </div>
+    `;
   });
 });
 
