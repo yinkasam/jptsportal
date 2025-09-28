@@ -54,10 +54,10 @@ async function saveLecture() {
 
     activeLectureId = docRef.id;
     alert("Lecture is now live! Students can view it on their portal.");
-  } catch (error) {
-    console.error("Error saving lecture: ", error);
-    alert("Failed to save lecture. Please try again.");
-  }
+} catch (error) {
+  console.error("Error saving lecture: ", error.message, error.code);
+  alert("Failed to save lecture: " + error.message);
+}
 }
 
 // ========== End current lecture ==========
