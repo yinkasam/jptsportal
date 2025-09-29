@@ -91,6 +91,9 @@ function renderRecording(lecture) {
   titleEl.textContent = `Recording: ${lecture.title} (${lecture.code})`;
   detailsEl.textContent = `Lecturer: ${lecture.lecturer}`;
   frameEl.src = lecture.recordingLink;
+
+  // Still show chat (general or lecture specific)
+  loadChat(lectureId);
 }
 
 // === Attendance ===
@@ -137,9 +140,10 @@ const chatMessagesEl = document.getElementById("chatMessages");
 const chatInputEl = document.getElementById("chatMessage");
 
 function loadChat(lectureId) {
+  const chatLectureId = lectureId || "general"; // ✅ consistent fallback
   const q = query(
     collection(db, "chats"),
-    where("lectureId", "==", lectureId),
+    where("lectureId", "==", chatLectureId),
     orderBy("timestamp", "asc")
   );
 
@@ -171,10 +175,12 @@ window.sendMessage = async function () {
     name = userDoc.data().name || user.email;
   }
 
+  const chatLectureId = lectureId || "general"; // ✅ consistent fallback
+
   await addDoc(collection(db, "chats"), {
     userId: user.uid,
     name,
-    lectureId: lectureId || "general",
+    lectureId: chatLectureId,
     message,
     timestamp: serverTimestamp()
   });
