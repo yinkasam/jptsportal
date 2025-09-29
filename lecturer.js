@@ -9,16 +9,26 @@ import {
   doc,
   query,
   where,
-  getDocs
+  getDocs,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Track active lecture
 let activeLectureId = null;
 
 // ========== Protect the page ==========
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "LIVE.html";
+  } else {
+    // 🔥 On login, check if there's an active lecture
+    const liveQuery = query(collection(db, "lectures"), where("status", "==", "live"));
+    const liveSnap = await getDocs(liveQuery);
+
+    if (!liveSnap.empty) {
+      activeLectureId = liveSnap.docs[0].id;
+      console.log("Active lecture found:", activeLectureId);
+    }
   }
 });
 
@@ -54,16 +64,16 @@ async function saveLecture() {
 
     activeLectureId = docRef.id;
     alert("Lecture is now live! Students can view it on their portal.");
-} catch (error) {
-  console.error("Error saving lecture: ", error.message, error.code);
-  alert("Failed to save lecture: " + error.message);
-}
+  } catch (error) {
+    console.error("Error saving lecture: ", error.message, error.code);
+    alert("Failed to save lecture: " + error.message);
+  }
 }
 
 // ========== End current lecture ==========
 async function endLecture() {
   if (!activeLectureId) {
-    alert("No active lecture to end.");
+    alert("No active lecture to end. Try refreshing the page.");
     return;
   }
 
