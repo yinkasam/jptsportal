@@ -9,8 +9,7 @@ import {
   doc,
   query,
   where,
-  getDocs,
-  onSnapshot
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // Track active lecture
@@ -96,6 +95,59 @@ async function endLecture() {
   }
 }
 
+// ========== Download Attendance ==========
+async function downloadAttendance() {
+  if (!activeLectureId) {
+    alert("No active lecture selected.");
+    return;
+  }
+
+  try {
+    // Query all attendance records for this lecture
+    const q = query(
+      collection(db, "attendance"),
+      where("lectureId", "==", activeLectureId)
+    );
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      alert("No attendance records found for this lecture.");
+      return;
+    }
+
+    // Prepare CSV rows
+    let rows = [["User ID", "Lecture Title", "Lecture Code", "Timestamp"]];
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      rows.push([
+        data.userId,
+        data.lectureTitle,
+        data.lectureCode,
+        data.timestamp?.toDate().toLocaleString() || "N/A"
+      ]);
+    });
+
+    // Convert rows → CSV string
+    let csvContent = rows.map(e => e.join(",")).join("\n");
+
+    // Create downloadable blob
+    let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    let url = URL.createObjectURL(blob);
+
+    // Trigger browser download
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = `attendance_${activeLectureId}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+  } catch (error) {
+    console.error("Error downloading attendance:", error);
+    alert("Failed to download attendance.");
+  }
+}
+
 // ========== Logout ==========
 function logout() {
   signOut(auth).then(() => {
@@ -105,7 +157,8 @@ function logout() {
   });
 }
 
-// Expose functions
+// Expose functions to window
 window.saveLecture = saveLecture;
 window.endLecture = endLecture;
+window.downloadAttendance = downloadAttendance;
 window.logout = logout;
