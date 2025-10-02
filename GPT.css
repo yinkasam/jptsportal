@@ -107,6 +107,16 @@ button:hover {
   background-color: #b9058c;
   transform: translate(-2px);
 }
+.button-group {
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  margin-top: 15px;
+  gap: 12px; /* spacing between buttons */
+}
+
+.button-group button {
+  min-width: 140px;
+}
 
 /* === STREAMING IFRAME === */
 .stream-box {
@@ -470,6 +480,7 @@ button:hover {
   nav { margin-top: 1rem; }
   .fixed-counter { font-size: 0.9rem; padding: 0.5rem; }
 }
+
 
 
 
