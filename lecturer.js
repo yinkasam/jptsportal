@@ -103,7 +103,16 @@ async function downloadAttendance() {
   }
 
   try {
-    // Query all attendance records for this lecture
+    // Get lecture info first
+    const lectureRef = doc(db, "lectures", activeLectureId);
+    const lectureSnap = await getDocs(query(collection(db, "lectures"), where("__name__", "==", activeLectureId)));
+    let courseCode = "Lecture";
+    if (!lectureSnap.empty) {
+      const data = lectureSnap.docs[0].data();
+      courseCode = data.code || "Lecture";
+    }
+
+    // Query attendance for this lecture
     const q = query(
       collection(db, "attendance"),
       where("lectureId", "==", activeLectureId)
@@ -134,10 +143,15 @@ async function downloadAttendance() {
     let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     let url = URL.createObjectURL(blob);
 
+    // Generate filename with courseCode + today’s date
+    const today = new Date();
+    const dateStr = today.toISOString().split("T")[0]; // YYYY-MM-DD
+    const fileName = `attendance_${courseCode}_${dateStr}.csv`;
+
     // Trigger browser download
     let a = document.createElement("a");
     a.href = url;
-    a.download = `attendance_${activeLectureId}.csv`;
+    a.download = fileName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
