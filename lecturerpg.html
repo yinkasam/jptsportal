@@ -38,11 +38,12 @@
       <label for="lectureLink">Streaming Link:</label>
       <input type="text" id="lectureLink" placeholder="Paste YouTube or Facebook embed link here" required /><br />
 
-      <!-- Action buttons -->
-      <button class="save-btn" onclick="saveLecture()">Go Live</button>
-      <button class="end-btn" onclick="endLecture()">End Lecture</button>
-    </div>
-  </div>
+     <!-- Action buttons -->
+<div class="button-group">
+  <button class="save-btn" onclick="saveLecture()">Go Live</button>
+  <button class="end-btn" onclick="endLecture()">End Lecture</button>
+  <button class="download-btn" onclick="downloadAttendance()">Download Attendance</button>
+</div>
 
   <!-- Firebase -->
   <script type="module" src="./firebase.js"></script>
@@ -82,3 +83,4 @@
   </footer>
 </body>
 </html>
+
